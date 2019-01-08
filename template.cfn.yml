@@ -128,7 +128,7 @@ Resources:
             dns_record = None
             try:
               if event['RequestType'] == 'Delete':
-                stacks = client.describe_stacks(stack_name)
+                stacks = client.describe_stacks(StackName=stack_name)
                 for output in stacks[0].outputs:
                   if output.key == 'CertDnsValidationRecord':
                     dns_client.change_resource_record_sets(HostedZoneId=zone_id, ChangeBatch={
@@ -175,6 +175,7 @@ Resources:
               - Resource: !Sub arn:aws:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/${AWS::StackName}/*
                 Effect: Allow
                 Action:
+                  - cloudformation:DescribeStacks
                   - cloudformation:DescribeStackEvents
               - Resource: !Sub arn:aws:route53:::hostedzone/${HostedZoneId}
                 Effect: Allow
